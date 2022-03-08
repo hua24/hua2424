@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView
+        android:id="@+id/second_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#403D3D"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+        <ImageButton
+            android:id="@+id/show"
+            android:layout_width="50sp"
+            android:layout_height="50sp"
+            android:background="@drawable/yuanxing_beijing"
+            android:onClick="secondtofirst"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/back" />
+
+        <EditText
+            android:id="@+id/edittext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="5" />
+
+        <TextView
+            style="@style/shadow"
+            android:textColor="@color/white"
+            android:onClick="open_file"
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:background="@drawable/juxing_beijing"
+            android:clickable="true"
+            android:text="选择文件夹"
+            android:textSize="30sp" />
+
+        <TextView
+            style="@style/shadow"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="50sp"
+            android:background="@drawable/juxing_beijing"
+            android:clickable="true"
+            android:onClick="daoru"
+            android:text="导入文件夹"
+            android:textSize="30sp" />
+
+        <ListView
+            android:id="@+id/music_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#B5000000"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical">
+        <TextView
+            style="@style/shadow"
+            android:textColor="@color/white"
+            android:id="@+id/rename_gedan"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="30sp"
+            android:background="@drawable/juxing_beijing"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="重命名"/>
+        <TextView
+            style="@style/shadow"
+            android:textColor="@color/white"
+            android:id="@+id/delete_gedan"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:textSize="30sp"
+            android:background="@drawable/juxing_beijing"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="删除歌单"/>
+    </LinearLayout>

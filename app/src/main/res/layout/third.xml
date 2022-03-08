@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <ImageView
+        android:id="@+id/third_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#403D3D"
+        android:scaleType="centerCrop" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"/>
+            <ImageView
+                android:onClick="back_timing"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/back"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/shadow"
+                android:textColor="@color/white"
+                android:text="取消"
+                android:textSize="30sp"
+                android:gravity="center"
+                android:onClick="timing_no"
+                android:background="@drawable/juxing_beijing"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"/>
+            <TextView
+                style="@style/shadow"
+                android:textColor="@color/white"
+                android:text="确定"
+                android:textSize="30sp"
+                android:onClick="timing_yes"
+                android:gravity="center"
+                android:background="@drawable/juxing_beijing"
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"/>
+        </LinearLayout>
+        <TimePicker
+            android:id="@+id/timing_picker"
+            android:theme="@style/mytimepicker"
+            android:numbersSelectorColor="@color/red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+
+</RelativeLayout>
