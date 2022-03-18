@@ -55,7 +55,7 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="@drawable/yuanxing_beijing"
-                    android:src="@mipmap/side"
+                    android:src="@mipmap/search"
                     android:scaleType="centerCrop" />
             </RelativeLayout>
         <RelativeLayout
