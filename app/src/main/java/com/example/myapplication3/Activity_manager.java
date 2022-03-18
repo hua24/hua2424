@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Activity_manager {
-    //顶顶顶sssss
+    //顶顶顶ss
     public static  List<Activity> activities = new ArrayList<Activity>();
     public static void addActivity(Activity activity) {
         activities.add(activity);
