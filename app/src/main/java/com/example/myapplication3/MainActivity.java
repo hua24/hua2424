@@ -37,6 +37,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     byte[] image = null;
     ListView listView;
     String progress;
+    EditText editText_search;
     ImageView imageView;
     music_adapter music_adapter;
     boolean activity_running;
@@ -119,12 +121,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         activity=this;
         activity_running=true;
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         if(Build.VERSION.SDK_INT >= 21) {//判断版本，设置状态栏透明（透明度可调），没有判断会报错
             Window window = getWindow();
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.setStatusBarColor(Color.argb(25,00,00,00));
         }
         imageView = (ImageView) findViewById(R.id.small_picture);
+        editText_search = (EditText)findViewById(R.id.search_song);
         requestPermissions();
         if(Mydata.Load_info(activity,"weathershow","no").equals("yes"))
             getweather(Mydata.Load_info(activity,"city","婺源"));
@@ -132,8 +137,7 @@ public class MainActivity extends AppCompatActivity {
         intentFilter.addAction("picture_change");
         intentFilter.addAction("play_change");
         registerReceiver(myreceiver,intentFilter);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
         progressBar=(ProgressBar)findViewById(R.id.small_progressbar);
         numberFormat.setMaximumFractionDigits(0);
         check();
@@ -195,6 +199,19 @@ public class MainActivity extends AppCompatActivity {
             mSwitch2.setChecked(true);
         }else
             mSwitch2.setChecked(false);
+        editText_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId==EditorInfo.IME_ACTION_SEARCH){
+                    String s=editText_search.getText().toString();
+                    if(s.length()>0)
+                        listView.setSelection(Mydata.get_song_position(s));
+                    return true;
+                }
+
+                return false;
+            }
+        });
     }
     public void onRestart(){
         music_adapter.notifyDataSetChanged();
@@ -292,6 +309,11 @@ public class MainActivity extends AppCompatActivity {
         stopService(intent);//解除服务绑定
         Mydata.recycle_bitmap();
         super.onDestroy();
+    }
+    public void search(View v){
+        String s=editText_search.getText().toString();
+        if(s.length()>0)
+            listView.setSelection(Mydata.get_song_position(s));
     }
     public void open(View v){//打开侧边栏
         DrawerLayout drawerLayout=(DrawerLayout) findViewById(R.id.drawer_layout);

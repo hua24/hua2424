@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/show_time"/>
                 <SeekBar
-                    android:thumb="@mipmap/seekbar_icon"
+                    android:thumbTint="@color/red"
                     android:progressTint="@color/Red"
                     android:id="@+id/seekbar"
                     android:layout_width="0dp"

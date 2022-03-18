@@ -19,18 +19,45 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <!--任务栏占位-->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"/>
-        <!--打开侧边栏-->
-        <ImageButton
-            android:onClick="open"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/yuanxing_beijing"
-            android:src="@mipmap/side"
-            android:scaleType="centerCrop" />
+            <!--任务栏占位-->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"/>
+            <!--打开侧边栏-->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+                <ImageButton
+                    android:id="@+id/main_side"
+                    android:layout_alignParentStart="true"
+                    android:onClick="open"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/yuanxing_beijing"
+                    android:src="@mipmap/side"
+                    android:scaleType="centerCrop" />
+                <EditText
+                    android:id="@+id/search_song"
+                    android:hint="输入歌曲名"
+                    android:imeOptions="actionSearch"
+                    android:singleLine="true"
+                    android:textAlignment="center"
+                    android:textCursorDrawable="@null"
+                    android:background="@drawable/bg_2"
+                    android:layout_toEndOf="@+id/main_side"
+                    android:layout_toStartOf="@+id/main_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="43dp"/>
+                <ImageButton
+                    android:onClick="search"
+                    android:id="@+id/main_search"
+                    android:layout_alignParentEnd="true"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:background="@drawable/yuanxing_beijing"
+                    android:src="@mipmap/side"
+                    android:scaleType="centerCrop" />
+            </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

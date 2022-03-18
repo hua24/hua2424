@@ -232,6 +232,13 @@ public class Mydata{
             Mydata.song_lines.add(map);//添加进列表
         }
     }
+    public static int get_song_position(String s){
+        for(int i=0;i<Mydata.mylist.size();i++){
+            if(Mydata.mylist.get(i).get("path").toString().contains(s))
+                return i;
+        }
+        return 0;
+    }
     public static void background(Activity activity,ImageView imageView){
         if(activity.fileList().length>0){
             try {
