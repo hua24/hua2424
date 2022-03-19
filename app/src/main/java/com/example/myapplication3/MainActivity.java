@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -22,6 +23,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -74,13 +78,13 @@ import java.text.NumberFormat;
 
 public class MainActivity extends AppCompatActivity {
     Activity activity;
-    Myreceiver myreceiver =new Myreceiver();
-    IntentFilter intentFilter=new IntentFilter();
+    Myreceiver myreceiver = new Myreceiver();
+    IntentFilter intentFilter = new IntentFilter();
     NumberFormat numberFormat = NumberFormat.getInstance();
     ProgressBar progressBar;
     SwitchCompat mSwitch;
     SwitchCompat mSwitch2;
-    Bitmap bitmap=null;
+    Bitmap bitmap = null;
     byte[] image = null;
     ListView listView;
     String progress;
@@ -88,123 +92,124 @@ public class MainActivity extends AppCompatActivity {
     ImageView imageView;
     music_adapter music_adapter;
     boolean activity_running;
-    Handler handler=new Handler(Looper.myLooper()){
+    Handler handler = new Handler(Looper.myLooper()) {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            if(msg.what==1){
-                String weather =(String) msg.obj;
-                Gson gson=new Gson();
-                weatherbean weatherbean=gson.fromJson(weather, com.example.myapplication3.bean.weatherbean.class);
-                if(weatherbean==null)
+            if (msg.what == 1) {
+                String weather = (String) msg.obj;
+                Gson gson = new Gson();
+                weatherbean weatherbean = gson.fromJson(weather, com.example.myapplication3.bean.weatherbean.class);
+                if (weatherbean == null)
                     return;
-                String today=weatherbean.getCity()+weatherbean.getUpdatetime()+weatherbean.getSecondbeans().get(0).getWea_img();
+                String today = weatherbean.getCity() + weatherbean.getUpdatetime() + weatherbean.getSecondbeans().get(0).getWea_img();
                 System.out.println(today);
-                TextView textView1=(TextView)findViewById(R.id.weather_today);
-                TextView textView2=(TextView)findViewById(R.id.weather_tomorrow);
-                TextView textView3=(TextView)findViewById(R.id.city);
-                ImageView imageView=(ImageView)findViewById(R.id.img_weather);
-                if(weatherbean.getSecondbeans().get(0).getWea()!=null)
+                TextView textView1 = (TextView) findViewById(R.id.weather_today);
+                TextView textView2 = (TextView) findViewById(R.id.weather_tomorrow);
+                TextView textView3 = (TextView) findViewById(R.id.city);
+                ImageView imageView = (ImageView) findViewById(R.id.img_weather);
+                if (weatherbean.getSecondbeans().get(0).getWea() != null)
                     textView1.setText(weatherbean.getSecondbeans().get(0).getWea());
-                if(weatherbean.getSecondbeans().get(1).getWea()!=null)
+                if (weatherbean.getSecondbeans().get(1).getWea() != null)
                     textView2.setText(weatherbean.getSecondbeans().get(1).getWea());
-                if(weatherbean.getCity()!=null)
+                if (weatherbean.getCity() != null)
                     textView3.setText(weatherbean.getCity());
                 imageView.setImageResource(getimgfromweather(weatherbean.getSecondbeans().get(0).getWea_img()));
             }
-            if(msg.what==2){
+            if (msg.what == 2) {
                 shuaxing();
             }
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        activity=this;
-        activity_running=true;
+        activity = this;
+        activity_running = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if(Build.VERSION.SDK_INT >= 21) {//判断版本，设置状态栏透明（透明度可调），没有判断会报错
+        if (Build.VERSION.SDK_INT >= 21) {//判断版本，设置状态栏透明（透明度可调），没有判断会报错
             Window window = getWindow();
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.setStatusBarColor(Color.argb(25,00,00,00));
+            window.setStatusBarColor(Color.argb(25, 00, 00, 00));
         }
         imageView = (ImageView) findViewById(R.id.small_picture);
-        editText_search = (EditText)findViewById(R.id.search_song);
+        editText_search = (EditText) findViewById(R.id.search_song);
         requestPermissions();
-        if(Mydata.Load_info(activity,"weathershow","no").equals("yes"))
-            getweather(Mydata.Load_info(activity,"city","婺源"));
+        if (Mydata.Load_info(activity, "weathershow", "no").equals("yes"))
+            getweather(Mydata.Load_info(activity, "city", "婺源"));
         intentFilter.addAction("time_change");
         intentFilter.addAction("picture_change");
         intentFilter.addAction("play_change");
-        registerReceiver(myreceiver,intentFilter);
+        registerReceiver(myreceiver, intentFilter);
 
-        progressBar=(ProgressBar)findViewById(R.id.small_progressbar);
+        progressBar = (ProgressBar) findViewById(R.id.small_progressbar);
         numberFormat.setMaximumFractionDigits(0);
         check();
         shuaxing();
         update_progress();
-        listView=(ListView)findViewById(R.id.music_list2);
-        music_adapter=new music_adapter(activity, Mydata.mylist);
+        listView = (ListView) findViewById(R.id.music_list2);
+        music_adapter = new music_adapter(activity, Mydata.mylist);
         listView.setAdapter(music_adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Mydata.list_switch=true;
-                String s=Mydata.mylist.get(position).get("path").toString();
-                String s1=Mydata.mylist.get(position).get("time").toString();
-                Mydata.path=s;
-                Mydata.time_onesong=s1;
-                Intent intent=new Intent("play");
+                Mydata.list_switch = true;
+                String s = Mydata.mylist.get(position).get("path").toString();
+                String s1 = Mydata.mylist.get(position).get("time").toString();
+                Mydata.path = s;
+                Mydata.time_onesong = s1;
+                Intent intent = new Intent("play");
                 sendBroadcast(intent);
                 shuaxing2();
                 check();
             }
         });
-        Intent intent=new Intent(activity,music_service.class);
+        Intent intent = new Intent(activity, music_service.class);
         startService(intent);
-        if(Mydata.Load_info(activity,"path",null)!=null)//默认文件位置
-            Mydata.daoru(activity,Mydata.Load_info(activity,"path",null));
-        Mydata.mode=Mydata.Load_info(activity,"mode","order");//默认播放模式
+        if (Mydata.Load_info(activity, "path", null) != null)//默认文件位置
+            Mydata.daoru(activity, Mydata.Load_info(activity, "path", null));
+        Mydata.mode = Mydata.Load_info(activity, "mode", "order");//默认播放模式
         Activity_manager.addActivity(activity);
-        ImageView imageView=(ImageView)findViewById(R.id.main_bg);
-        Mydata.background(activity,imageView);
-        mSwitch=(SwitchCompat)findViewById(R.id.setting_back);
+        ImageView imageView = (ImageView) findViewById(R.id.main_bg);
+        Mydata.background(activity, imageView);
+        mSwitch = (SwitchCompat) findViewById(R.id.setting_back);
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    Mydata.Save_info(activity,"back","yes");
-                }else{
-                    Mydata.Save_info(activity,"back","no");
+                if (isChecked) {
+                    Mydata.Save_info(activity, "back", "yes");
+                } else {
+                    Mydata.Save_info(activity, "back", "no");
                 }
             }
         });
-        if(Mydata.Load_info(activity,"back","no").equals("yes")){
+        if (Mydata.Load_info(activity, "back", "no").equals("yes")) {
             mSwitch.setChecked(true);
-        }else
+        } else
             mSwitch.setChecked(false);
-        mSwitch2=(SwitchCompat)findViewById(R.id.setting_weather);
+        mSwitch2 = (SwitchCompat) findViewById(R.id.setting_weather);
         mSwitch2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if(isChecked){
-                    Mydata.Save_info(activity,"weathershow","yes");
-                    getweather(Mydata.Load_info(activity,"city","婺源"));
-                }else{
-                    Mydata.Save_info(activity,"weathershow","no");
+                if (isChecked) {
+                    Mydata.Save_info(activity, "weathershow", "yes");
+                    getweather(Mydata.Load_info(activity, "city", "婺源"));
+                } else {
+                    Mydata.Save_info(activity, "weathershow", "no");
                 }
             }
         });
-        if(Mydata.Load_info(activity,"weathershow","no").equals("yes")){
+        if (Mydata.Load_info(activity, "weathershow", "no").equals("yes")) {
             mSwitch2.setChecked(true);
-        }else
+        } else
             mSwitch2.setChecked(false);
         editText_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId==EditorInfo.IME_ACTION_SEARCH){
-                    String s=editText_search.getText().toString();
-                    if(s.length()>0)
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String s = editText_search.getText().toString();
+                    if (s.length() > 0)
                         listView.setSelection(Mydata.get_song_position(s));
                     return true;
                 }
@@ -213,21 +218,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void onRestart(){
+
+    public void onRestart() {
         music_adapter.notifyDataSetChanged();
         super.onRestart();
     }
+
     public class Myreceiver extends BroadcastReceiver {//监听来自music_service的广播
 
         @Override
         public void onReceive(Context context, Intent intent) {//有广播时调用此函数
-            switch (intent.getAction()){
-                case "picture_change":{
+            switch (intent.getAction()) {
+                case "picture_change": {
                     shuaxing2();
                     check_picture();
                     break;
                 }
-                case "play_change":{
+                case "play_change": {
                     check();
                     break;
                 }
@@ -235,6 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
+
     public void setting(View v){
         LinearLayout linearLayout=(LinearLayout)findViewById(R.id.setting_layout);
         if(linearLayout.getVisibility()==View.VISIBLE)

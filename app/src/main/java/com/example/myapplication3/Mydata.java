@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationManager;
 import android.media.MediaPlayer;
 import android.view.View;
 import android.widget.EditText;
@@ -239,6 +241,7 @@ public class Mydata{
         }
         return 0;
     }
+
     public static void background(Activity activity,ImageView imageView){
         if(activity.fileList().length>0){
             try {

@@ -142,76 +142,83 @@
         android:layout_height="match_parent"
         android:layout_width="270dp"
         >
-        <!--任务栏占位-->
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"/>
         <LinearLayout
             android:background="@drawable/bg"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:orientation="horizontal"
-            >
-            <LinearLayout
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:orientation="vertical">
-                <TextView
-                    android:id="@+id/city"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    style="@style/shadow"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"
-                    android:gravity="center" />
-                <ImageView
-                    android:id="@+id/img_weather"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"/>
-            </LinearLayout>
-
-            <LinearLayout
+            android:layout_height="200dp"
+            android:orientation="vertical">
+            <!--任务栏占位-->
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-                <TextView
+                android:layout_height="50dp"/>
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="horizontal"
+                >
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="150dp"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/city"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        style="@style/shadow"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:gravity="center" />
+                    <ImageView
+                        android:id="@+id/img_weather"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"/>
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    style="@style/shadow"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"
-                    android:text="今天"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:id="@+id/weather_today"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:gravity="center"
-                    style="@style/shadow"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"
-                    android:text="无数据"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    style="@style/shadow"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"
-                    android:text="明天"
-                    android:layout_weight="1"/>
-                <TextView
-                    android:id="@+id/weather_tomorrow"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    style="@style/shadow"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textColor="@color/white"
-                    android:text="无数据"
-                    android:layout_weight="1"/>
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        style="@style/shadow"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:text="今天"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/weather_today"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:gravity="center"
+                        style="@style/shadow"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:text="无数据"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        style="@style/shadow"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:text="明天"
+                        android:layout_weight="1"/>
+                    <TextView
+                        android:id="@+id/weather_tomorrow"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        style="@style/shadow"
+                        android:gravity="center"
+                        android:textSize="20sp"
+                        android:textColor="@color/white"
+                        android:text="无数据"
+                        android:layout_weight="1"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="20dp"/>
