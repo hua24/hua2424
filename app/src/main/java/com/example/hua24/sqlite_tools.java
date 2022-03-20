@@ -1,11 +1,8 @@
-package com.example.myapplication3;
+package com.example.hua24;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.view.View;
-import android.widget.EditText;
 
 import java.util.List;
 

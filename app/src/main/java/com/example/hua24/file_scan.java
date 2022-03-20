@@ -1,11 +1,9 @@
-package com.example.myapplication3;
+package com.example.hua24;
 
 import android.media.MediaMetadataRetriever;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class file_scan {

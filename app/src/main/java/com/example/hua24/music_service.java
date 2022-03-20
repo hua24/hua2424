@@ -1,27 +1,19 @@
-package com.example.myapplication3;
+package com.example.hua24;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.widget.ImageView;
 import android.widget.RemoteViews;
 
 import java.io.IOException;
@@ -208,7 +200,7 @@ public class music_service extends Service {
 
     }
     public void create_notification(){
-        RemoteViews remoteViews=new RemoteViews("com.example.myapplication3",R.layout.notificaction);//绑定通知栏布局
+        RemoteViews remoteViews=new RemoteViews(getPackageName(),R.layout.notificaction);//绑定通知栏布局
         nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         mBuilder=new Notification.Builder(this)
                 .setContentTitle("a")

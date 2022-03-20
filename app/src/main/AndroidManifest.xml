@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.myapplication3">
+    package="com.example.hua24">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission
@@ -23,30 +23,30 @@
 
 
         <activity
-            android:name=".Song_list_3"
+            android:name="com.example.hua24.Song_list_3"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Song_list_2"
+            android:name="com.example.hua24.Song_list_2"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Song_list_1"
+            android:name="com.example.hua24.Song_list_1"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".play_activity"
+            android:name="com.example.hua24.play_activity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".music_service"
+            android:name="com.example.hua24.music_service"
             android:enabled="true"
             android:exported="true"
             android:foregroundServiceType="mediaProjection" />
 
         <activity
-            android:name=".Sleep_timing"
+            android:name="com.example.hua24.Sleep_timing"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.hua24.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -55,7 +55,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".File_import"
+            android:name="com.example.hua24.File_import"
             android:screenOrientation="portrait" />
     </application>
 

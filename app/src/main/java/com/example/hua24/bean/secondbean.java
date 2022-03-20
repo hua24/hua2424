@@ -1,4 +1,4 @@
-package com.example.myapplication3.bean;
+package com.example.hua24.bean;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,4 +1,4 @@
-package com.example.myapplication3;
+package com.example.hua24;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -46,7 +46,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
 
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
-import com.example.myapplication3.bean.weatherbean;
+import com.example.hua24.bean.weatherbean;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             if (msg.what == 1) {
                 String weather = (String) msg.obj;
                 Gson gson = new Gson();
-                weatherbean weatherbean = gson.fromJson(weather, com.example.myapplication3.bean.weatherbean.class);
+                weatherbean weatherbean = gson.fromJson(weather, com.example.hua24.bean.weatherbean.class);
                 if (weatherbean == null)
                     return;
                 String today = weatherbean.getCity() + weatherbean.getUpdatetime() + weatherbean.getSecondbeans().get(0).getWea_img();

@@ -1,4 +1,4 @@
-package com.example.myapplication3;
+package com.example.hua24;
 
 import android.app.Activity;
 import android.graphics.Color;

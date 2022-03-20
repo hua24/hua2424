@@ -1,4 +1,4 @@
-package com.example.myapplication3;
+package com.example.hua24;
 
 public class tools {//将时间格式化
     public static String change_time(String time){
