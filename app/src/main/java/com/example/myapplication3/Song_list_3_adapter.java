@@ -12,12 +12,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class gedan2_adapter extends BaseAdapter {
+public class Song_list_3_adapter extends BaseAdapter {
     public LayoutInflater layoutInflater;
     public Context mycontext;
     public List<String> mylist;
     Map<Integer, Boolean> map=new HashMap<>();//标记checkbox选中状态，防止listview错误显示
-    public gedan2_adapter (Context context, List<String> list) {
+    public Song_list_3_adapter(Context context, List<String> list) {
         layoutInflater = LayoutInflater.from(context);
         this.mycontext = context;
         this.mylist = list;
@@ -44,7 +44,7 @@ public class gedan2_adapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
-            view = layoutInflater.inflate(R.layout.gedan2, null);
+            view = layoutInflater.inflate(R.layout.song_list_2_and_3_item, null);
         }
         else{
             view = convertView;
@@ -53,17 +53,16 @@ public class gedan2_adapter extends BaseAdapter {
         TextView textView_name = (TextView)view.findViewById(R.id.gedan2_textview);
         CheckBox checkBox= (CheckBox)view.findViewById(R.id.gedan2_checkbox);
         //设置内容
-        if(gadan2.ckeckbox)
-            checkBox.setVisibility(View.VISIBLE);//使checkbox为可见状态
+        checkBox.setVisibility(View.VISIBLE);
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(checkBox.isChecked()){
-                    gadan2.picked.add(mylist.get(position));//添加选中的项进入列表
+                    Song_list_3.picked.add(mylist.get(position));//添加选中的项进入列表
                     map.put(position,true);//标记位置
                 }
                 else {
-                    gadan2.picked.remove(mylist.get(position));//移除选中项
+                    Song_list_3.picked.remove(mylist.get(position));//移除选中项
                     map.remove(position);//移除位置
                 }
             }
@@ -83,3 +82,4 @@ public class gedan2_adapter extends BaseAdapter {
         return view;
     }
 }
+

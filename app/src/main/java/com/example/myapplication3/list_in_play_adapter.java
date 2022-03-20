@@ -8,13 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Map;
 
-public class dialog_adapter extends BaseAdapter {//播放界面的列表使用的适配器
+public class list_in_play_adapter extends BaseAdapter {//播放界面的列表使用的适配器
     public LayoutInflater layoutInflater;
     public Context mycontext;
     public List<String> mylist;
-    public dialog_adapter (Context context, List<String> list) {
+    public list_in_play_adapter(Context context, List<String> list) {
         layoutInflater = LayoutInflater.from(context);
         this.mycontext = context;
         this.mylist = list;
@@ -41,7 +40,7 @@ public class dialog_adapter extends BaseAdapter {//播放界面的列表使用�
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
-            view = layoutInflater.inflate(R.layout.dialog_item, null);
+            view = layoutInflater.inflate(R.layout.list_in_play_item, null);
         }
         else{
             view = convertView;

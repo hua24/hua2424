@@ -42,7 +42,7 @@ public class lyric_adapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
-            view = layoutInflater.inflate(R.layout.lyric_layout, null);
+            view = layoutInflater.inflate(R.layout.lyric_item, null);
         }
         else{
             view = convertView;

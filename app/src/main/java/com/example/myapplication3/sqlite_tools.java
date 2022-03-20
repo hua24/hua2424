@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 import java.util.List;
 
-public class sqlite_use {
+public class sqlite_tools {
     public static void insert_name(String name,String tablename,SQLiteDatabase sqLiteDatabase){//插入
         ContentValues values=new ContentValues();
         values.put("name",name);

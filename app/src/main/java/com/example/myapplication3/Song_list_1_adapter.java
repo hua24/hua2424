@@ -8,13 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import java.util.List;
-import java.util.Map;
 
-public class music_adapter extends BaseAdapter {//所有歌曲界面，显示歌曲信息
+public class Song_list_1_adapter extends BaseAdapter {
     public LayoutInflater layoutInflater;
     public Context mycontext;
-    public List<Map<String,Object>> mylist;
-    public music_adapter (Context context, List<Map<String,Object>> list) {
+    public List<String> mylist;
+    public Song_list_1_adapter(Context context, List<String> list) {
         layoutInflater = LayoutInflater.from(context);
         this.mycontext = context;
         this.mylist = list;
@@ -41,21 +40,15 @@ public class music_adapter extends BaseAdapter {//所有歌曲界面，显示歌
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
-            view = layoutInflater.inflate(R.layout.item_music, null);
+            view = layoutInflater.inflate(R.layout.song_list_1_item, null);
         }
         else{
             view = convertView;
         }
         //绑定布局
-        TextView textView_name = (TextView)view.findViewById(R.id.item_name);
-        TextView textView_size = (TextView)view.findViewById(R.id.item_size);
-        TextView textView_time = (TextView)view.findViewById(R.id.item_time);
-        TextView textView_path = (TextView)view.findViewById(R.id.item_path);
+        TextView textView_name = (TextView)view.findViewById(R.id.gedan_item);
         //设置内容
-        textView_name.setText(mylist.get(position).get("name").toString());//歌曲名
-        textView_size.setText(mylist.get(position).get("size").toString());//歌曲大小
-        textView_time.setText(tools.change_time(mylist.get(position).get("time").toString()));//歌曲时长
-        textView_path.setText(mylist.get(position).get("path").toString());//歌曲路径
+        textView_name.setText(mylist.get(position));
         return view;
     }
 }

@@ -1,12 +1,8 @@
 package com.example.myapplication3;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -18,8 +14,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.media.MediaDataSource;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,7 +21,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -43,10 +36,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 
 
@@ -60,19 +51,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
 import com.bumptech.glide.request.transition.Transition;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.text.NumberFormat;
-import java.util.HashMap;
-import java.util.Map;
 
 public class play_activity extends AppCompatActivity {
     public Activity activity;
@@ -83,11 +64,15 @@ public class play_activity extends AppCompatActivity {
     String progress;
     byte[] image = null;
     Bitmap bitmap;
+    ImageView imageView;
     ImageView imageView2;
     boolean activity_running;
-    TextView textView_time;
+    TextView show_time;
+    TextView play_name;
     SeekBar seekBar;
     ListView listView;
+    TextView total_time;
+    ImageButton imageButton;
     Animation rotateAnimation;
     HorizontalScrollView horizontalScrollView;
     int x1=0,x2=0,y1=0,y2=0;//监听滑动获取到的坐标
@@ -97,7 +82,7 @@ public class play_activity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             if(msg.what==10){
-                shuaxing();
+                update_progressbar_and_show_time();
             }
             if(msg.what==11){
                 check_lyric();
@@ -118,29 +103,32 @@ public class play_activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.play);
 
-        rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);
-        LinearInterpolator lin = new LinearInterpolator();
-        rotateAnimation.setInterpolator(lin);
-        numberFormat.setMaximumFractionDigits(0);
-        textView_time = (TextView) findViewById(R.id.show_time);
-        seekBar = (SeekBar) findViewById(R.id.seekbar);
-        listView=(ListView)findViewById(R.id.lyric);
-        horizontalScrollView=(HorizontalScrollView)findViewById(R.id.test2);
-        lyric_adapter=new lyric_adapter(activity, Mydata.song_lines);
-        listView.setAdapter(lyric_adapter);
-        imageView2=(ImageView)findViewById(R.id.picture);
-        ImageView imageView=(ImageView)findViewById(R.id.play_background);
-        Mydata.background(activity,imageView);
-
-
         if (Build.VERSION.SDK_INT >= 21) {//判断版本，设置状态栏透明（透明度可调），没有判断会报错
             Window window = getWindow();
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.setStatusBarColor(Color.argb(00, 00, 00, 00));
         }
-        if (Mydata.path != null){
-            check_picture();//检测图片刷新
-        }
+
+        rotateAnimation = AnimationUtils.loadAnimation(this, R.anim.rotate);//添加图片旋转动画
+        LinearInterpolator lin = new LinearInterpolator();
+        rotateAnimation.setInterpolator(lin);//匀速
+
+        numberFormat.setMaximumFractionDigits(0);//取消小数部分
+
+        show_time = (TextView) findViewById(R.id.show_time);
+        play_name = (TextView) findViewById(R.id.name_song);
+        seekBar = (SeekBar) findViewById(R.id.seekbar);
+        listView=(ListView)findViewById(R.id.lyric);
+        imageView=(ImageView)findViewById(R.id.play_background);
+        imageView2=(ImageView)findViewById(R.id.picture);
+        total_time = (TextView) findViewById(R.id.total_time);
+        imageButton = (ImageButton) findViewById(R.id.pause);
+        horizontalScrollView=(HorizontalScrollView)findViewById(R.id.test2);
+
+        lyric_adapter=new lyric_adapter(activity, Mydata.song_lines);
+        listView.setAdapter(lyric_adapter);
+        Mydata.background(activity,imageView);
+
         update_progress_and_time();
         Resources resources = activity.getResources();
         DisplayMetrics dm = resources.getDisplayMetrics();
@@ -154,19 +142,18 @@ public class play_activity extends AppCompatActivity {
         linearParams2.width=screenWidth;
         relativeLayout.setLayoutParams(linearParams2);//设置歌词界面充满屏幕宽
 
-        intentFilter.addAction("time_change");
         intentFilter.addAction("picture_change");
         intentFilter.addAction("play_change");
         registerReceiver(myreceiver, intentFilter);//接收广播注册
-        TextView test = (TextView) findViewById(R.id.test);
-        check();//播放&暂停按钮检查
-        shuaxing();//进度条与实时时间刷新
+
+        update_pause_and_play_and_anime_control();//播放&暂停按钮检查
+        update_progressbar_and_show_time();//进度条与实时时间刷新
         if(Mydata.path!=null) {
-            check_picture();//图片检查
-            shuaxing2();//刷新当前播放的音乐名字
+            update_picture();//图片检查
+            update_play_name_and_total_time();//刷新当前播放的音乐名字
         }
-        shuaxing3();//播放模式刷新
-        test.setText(tools.change_time(Mydata.time_onesong));//显示当前播放的单首歌曲的总时间
+        update_play_mode();//播放模式刷新
+        total_time.setText(tools.change_time(Mydata.time_onesong));//显示当前播放的单首歌曲的总时间
         horizontalScrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -267,14 +254,14 @@ public class play_activity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {//有广播时调用此函数
             switch (intent.getAction()) {
                 case "picture_change": {
-                    check_picture();//图片检查
-                    shuaxing2();//刷新当前播放的音乐名字
+                    update_picture();//图片检查
+                    update_play_name_and_total_time();//刷新当前播放的音乐名字
                     Mydata.lyric_scan();//歌词检查
                     check_lyric();
                     break;
                 }
                 case "play_change":{
-                    check();//播放&暂停按钮检查
+                    update_pause_and_play_and_anime_control();//播放&暂停按钮检查
                     break;
                 }
             }
@@ -282,8 +269,8 @@ public class play_activity extends AppCompatActivity {
         }
     }
 
-    public void shuaxing() {//进度条与实时时间刷新
-        textView_time.setText(tools.change_time(Mydata.time));
+    public void update_progressbar_and_show_time() {//进度条与实时时间刷新
+        show_time.setText(tools.change_time(Mydata.time));
         try{
             progress=numberFormat.format((float)Integer.parseInt(Mydata.time)/(float)Integer.parseInt(Mydata.time_onesong)*100);
         }catch (Exception e){
@@ -293,7 +280,7 @@ public class play_activity extends AppCompatActivity {
         seekBar.setProgress(Integer.parseInt(progress));
     }
 
-    public void pause(View v) {//暂停音乐
+    public void pause_or_play(View v) {//暂停音乐
         Intent intent = new Intent("check");
         sendBroadcast(intent);
     }
@@ -302,32 +289,30 @@ public class play_activity extends AppCompatActivity {
         Intent intent = new Intent("next");
         sendBroadcast(intent);
         check_lyric();
-        shuaxing();
-        check();
+        update_progressbar_and_show_time();
+        update_pause_and_play_and_anime_control();
     }
 
     public void previous(View v) {//上一首
         Intent intent = new Intent("previous");
         sendBroadcast(intent);
         check_lyric();
-        shuaxing();
-        check();
+        update_progressbar_and_show_time();
+        update_pause_and_play_and_anime_control();
     }
 
-    public void shuaxing2() {//刷新当前播放的音乐名字与时间
-        TextView test_name = (TextView) findViewById(R.id.name_song);
-        TextView textView = (TextView) findViewById(R.id.test);
+    public void update_play_name_and_total_time() {//刷新当前播放的音乐名字与时间
         if(Mydata.path!=null){
-            if(test_name.getText().toString()!=Mydata.getname_from_path())
-                test_name.setText(Mydata.getname_from_path());
+            if(play_name.getText().toString()!=Mydata.getname_from_path())
+                play_name.setText(Mydata.getname_from_path());
 
-            if(textView.getText().toString()!=Mydata.time_onesong)
-                textView.setText(tools.change_time(Mydata.time_onesong));//刷新当前播放的音乐时间
+            if(total_time.getText().toString()!=Mydata.time_onesong)
+                total_time.setText(tools.change_time(Mydata.time_onesong));//刷新当前播放的音乐时间
         }
 
     }
 
-    public void shuaxing3() {//播放模式刷新
+    public void update_play_mode() {//播放模式刷新
         ImageView imageView = (ImageView) findViewById(R.id.mode);
         switch (Mydata.mode) {
             case "order": {
@@ -376,14 +361,14 @@ public class play_activity extends AppCompatActivity {
     }
 
     public void show_list(View v) {
-        dialog_adapter dialog_adapter;
+        list_in_play_adapter dialog_adapter;
         BottomSheetDialog dialog=new BottomSheetDialog(activity);
-        View dialogView= LayoutInflater.from(activity).inflate(R.layout.dialog,null);
+        View dialogView= LayoutInflater.from(activity).inflate(R.layout.list_in_play,null);
         ListView listView= (ListView) dialogView.findViewById(R.id.dialog_list);
         if(Mydata.list_switch)//判断显示的播放列表
-            dialog_adapter=new dialog_adapter(activity,Mydata.play_list1);
+            dialog_adapter=new list_in_play_adapter(activity,Mydata.play_list1);
         else
-            dialog_adapter=new dialog_adapter(activity,Mydata.play_list2);
+            dialog_adapter=new list_in_play_adapter(activity,Mydata.play_list2);
         listView.setAdapter(dialog_adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -430,8 +415,7 @@ public class play_activity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    public void check() {//播放&暂停按钮检查
-        ImageButton imageButton = (ImageButton) findViewById(R.id.pause);
+    public void update_pause_and_play_and_anime_control() {//播放&暂停按钮检查&动画控制
         if (Mydata.pause == 1) {
             if(rotateAnimation != null) {
                 imageView2.startAnimation(rotateAnimation);
@@ -451,26 +435,23 @@ public class play_activity extends AppCompatActivity {
         }
     }
     public void check_lyric(){
-
+        if(Mydata.song_lines.size()<1){
+            listView.setVisibility(View.GONE);
+        }else{
+            listView.setVisibility(View.VISIBLE);
+        }
         if(!Mydata.lyric_stop){
             listView.post(new Runnable(){
                 public void run(){
                     if(Mydata.get_lyrics_position()!=999)
                     listView.smoothScrollToPositionFromTop(Mydata.get_lyrics_position(),500);
                 }
-
             });
             lyric_adapter.notifyDataSetChanged();
         }
-        if(Mydata.song_lines.size()<1){
-            listView.setVisibility(View.GONE);
-        }else{
-            listView.setVisibility(View.VISIBLE);
-        }
-
     }
     @SuppressLint("CheckResult")
-    public void check_picture() {//图片检查
+    public void update_picture() {//图片检查
         bitmap=null;
         if (Mydata.path_picture != null) {
             MediaMetadataRetriever metadata = new MediaMetadataRetriever();

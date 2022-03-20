@@ -1,7 +1,6 @@
 package com.example.myapplication3;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
@@ -11,32 +10,21 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
-import android.media.AudioManager;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -45,32 +33,23 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
-import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.RequestOptions;
 
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.DrawableCrossFadeFactory;
-import com.bumptech.glide.request.transition.Transition;
-import com.example.myapplication3.bean.secondbean;
 import com.example.myapplication3.bean.weatherbean;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -90,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     String progress;
     EditText editText_search;
     ImageView imageView;
-    music_adapter music_adapter;
+    Song_list_info_adapter Song_list_info_adapter;
     boolean activity_running;
     Handler handler = new Handler(Looper.myLooper()) {
         @Override
@@ -117,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 imageView.setImageResource(getimgfromweather(weatherbean.getSecondbeans().get(0).getWea_img()));
             }
             if (msg.what == 2) {
-                shuaxing();
+                update_progressbar();
             }
         }
     };
@@ -135,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         }
         imageView = (ImageView) findViewById(R.id.small_picture);
         editText_search = (EditText) findViewById(R.id.search_song);
+        progressBar = (ProgressBar) findViewById(R.id.small_progressbar);
         requestPermissions();
         if (Mydata.Load_info(activity, "weathershow", "no").equals("yes"))
             getweather(Mydata.Load_info(activity, "city", "婺源"));
@@ -142,15 +122,13 @@ public class MainActivity extends AppCompatActivity {
         intentFilter.addAction("picture_change");
         intentFilter.addAction("play_change");
         registerReceiver(myreceiver, intentFilter);
-
-        progressBar = (ProgressBar) findViewById(R.id.small_progressbar);
         numberFormat.setMaximumFractionDigits(0);
-        check();
-        shuaxing();
+        update_pause_and_play();
+        update_progressbar();
         update_progress();
         listView = (ListView) findViewById(R.id.music_list2);
-        music_adapter = new music_adapter(activity, Mydata.mylist);
-        listView.setAdapter(music_adapter);
+        Song_list_info_adapter = new Song_list_info_adapter(activity, Mydata.mylist);
+        listView.setAdapter(Song_list_info_adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -161,8 +139,8 @@ public class MainActivity extends AppCompatActivity {
                 Mydata.time_onesong = s1;
                 Intent intent = new Intent("play");
                 sendBroadcast(intent);
-                shuaxing2();
-                check();
+                update_playing_name();
+                update_pause_and_play();
             }
         });
         Intent intent = new Intent(activity, music_service.class);
@@ -218,31 +196,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     public void onRestart() {
-        music_adapter.notifyDataSetChanged();
+        Song_list_info_adapter.notifyDataSetChanged();
         super.onRestart();
     }
-
     public class Myreceiver extends BroadcastReceiver {//监听来自music_service的广播
 
         @Override
         public void onReceive(Context context, Intent intent) {//有广播时调用此函数
             switch (intent.getAction()) {
                 case "picture_change": {
-                    shuaxing2();
-                    check_picture();
+                    update_playing_name();
+                    update_picture();
                     break;
                 }
                 case "play_change": {
-                    check();
+                    update_pause_and_play();
                     break;
                 }
             }
 
         }
     }
-
     public void setting(View v){
         LinearLayout linearLayout=(LinearLayout)findViewById(R.id.setting_layout);
         if(linearLayout.getVisibility()==View.VISIBLE)
@@ -290,20 +265,19 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent("next");
         sendBroadcast(intent);
     }
-    public void shuaxing(){
+    public void update_progressbar(){//进度条刷新
             try{
                 progress=numberFormat.format((float)Integer.parseInt(Mydata.time)/(float)Integer.parseInt(Mydata.time_onesong)*100);
             }catch (Exception e){
                 progress="0";
             }
-            //progress=numberFormat.format((float)Integer.parseInt(Mydata.time)/(float)Integer.parseInt(Mydata.time_onesong)*100);
         progressBar.setProgress(Integer.parseInt(progress));
     }
-    public void shuaxing2(){
+    public void update_playing_name(){
         TextView test_name=(TextView)findViewById(R.id.small_name);
         test_name.setText(Mydata.getname_from_path());
     }
-    public void check() {//播放&暂停按钮检查
+    public void update_pause_and_play() {//播放&暂停按钮检查
         ImageView imageView = (ImageView) findViewById(R.id.small_pause_or_play);
         if (Mydata.pause == 1) {
             imageView.setImageResource(R.mipmap.show_dark);
@@ -323,7 +297,7 @@ public class MainActivity extends AppCompatActivity {
         if(s.length()>0)
             listView.setSelection(Mydata.get_song_position(s));
     }
-    public void open(View v){//打开侧边栏
+    public void open_side(View v){//打开侧边栏
         DrawerLayout drawerLayout=(DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.openDrawer(Gravity.LEFT);
         LinearLayout linearLayout=(LinearLayout)findViewById(R.id.setting_layout);
@@ -331,32 +305,32 @@ public class MainActivity extends AppCompatActivity {
             linearLayout.setVisibility(View.GONE);
 
     }
-    public void firsttosecond(View v){//文件导入界面
+    public void to_file_import(View v){//文件导入界面
         Intent intent =new Intent();
-        intent.setClass(activity,secondactivity.class);
+        intent.setClass(activity, File_import.class);
         startActivity(intent);
         overridePendingTransition(0,android.R.anim.slide_out_right);//界面过渡效果
     }
-    public void firsttothird(View v){//所有歌曲界面
+    public void to_sleep_timing(View v){//睡眠定时界面
         Intent intent =new Intent();
-        intent.setClass(activity,thirdactivity.class);
+        intent.setClass(activity, Sleep_timing.class);
         startActivity(intent);
         overridePendingTransition(0,android.R.anim.slide_out_right);//界面过渡效果
 
     }
-    public void gedan(View v){//歌单管理界面
+    public void songlist_manage(View v){//歌单管理界面
         Intent intent =new Intent();
-        intent.setClass(activity, gedan.class);
+        intent.setClass(activity, Song_list_1.class);
         startActivity(intent);
         overridePendingTransition(0,android.R.anim.slide_out_right);//界面过渡效果
     }
-    public void show(View v){//播放界面
+    public void to_playing(View v){//播放界面
         Intent intent =new Intent();
         intent.setClass(activity,play_activity.class);
         startActivity(intent);
         overridePendingTransition(0,android.R.anim.slide_out_right);//界面过渡效果
     }
-    public void check_picture() {//图片检查
+    public void update_picture() {//图片检查
         if (Mydata.path_picture != null) {
             MediaMetadataRetriever metadata = new MediaMetadataRetriever();
             metadata.setDataSource(Mydata.path_picture);
@@ -399,14 +373,13 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0, android.R.anim.slide_out_right);
         return super.onKeyDown(keyCode, event);
     }
-    public void select_img(View v){
+    public void select_img(View v){//挑选背景图片
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         startActivityForResult(intent, 1);
 
     }
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null) {
@@ -417,7 +390,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
     public byte[] readBytes(Uri inUri) throws IOException {
         InputStream inputStream = getContentResolver().openInputStream(inUri);
         // this dynamically extends to take the bytes you read
@@ -446,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView imageView=(ImageView)findViewById(R.id.main_bg);
         Mydata.background(activity,imageView);
     }
-    private void getweather(String cityname){
+    private void getweather(String cityname){//根据城市名称获取天气数据
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -457,7 +429,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
     }
-    public int getimgfromweather(String weather){
+    public int getimgfromweather(String weather){//为天气添加对应图片
         //xue、lei、shachen、wu、bingbao、yun、yu、yin、qing
         int result=0;
         switch (weather){
@@ -504,7 +476,7 @@ public class MainActivity extends AppCompatActivity {
                             100);
             }
     }
-    private void update_progress(){
+    private void update_progress(){//发送更新进度条指令
         new Thread(){
             @Override
             public void run() {

@@ -1,11 +1,7 @@
 package com.example.myapplication3;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -18,29 +14,33 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.zlylib.fileselectorlib.FileSelector;
 import com.zlylib.fileselectorlib.utils.Const;
 
 import java.util.ArrayList;
 
-public class secondactivity extends AppCompatActivity {
+public class File_import extends AppCompatActivity {
     public Activity activity;
-
+    ImageView imageView;
+    EditText editText;
+    ListView listView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         activity=this;
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.file_import);
         if(Build.VERSION.SDK_INT >= 21) {
             Window window = getWindow();
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.setStatusBarColor(Color.argb(17,00,00,00));
         }
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.second);
-        ImageView imageView=(ImageView)findViewById(R.id.second_bg);
+
+        editText=(EditText)findViewById(R.id.edittext);
+        imageView=(ImageView)findViewById(R.id.second_bg);
+        listView=(ListView)findViewById(R.id.music_list);
+
         Mydata.background(activity,imageView);
-        EditText editText=(EditText)findViewById(R.id.edittext);
         editText.setText(Mydata.Load_info(activity,"path",null));
     }
     public void open_file(View v){
@@ -54,9 +54,6 @@ public class secondactivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK)
             if(requestCode==1){
-                //Uri uri = data.getData();
-                //String ss = uri_to_path.getFilePathByUri(this, uri);
-                //String path = ss.substring(0, ss.lastIndexOf("/"));//裁剪
                 ArrayList<String> essFileList = data.getStringArrayListExtra(Const.EXTRA_RESULT_SELECTION);
                 StringBuilder builder = new StringBuilder();
                 for (String file : essFileList) {
@@ -68,10 +65,8 @@ public class secondactivity extends AppCompatActivity {
     }
     public void daoru(View v){//获取界面上的path，给list赋值
         Mydata.daoru(this,null);
-        EditText editText=(EditText)findViewById(R.id.edittext);
-        ListView listView=(ListView)findViewById(R.id.music_list);
-        music_adapter music_adapter=new music_adapter(this, Mydata.mylist);
-        listView.setAdapter(music_adapter);
+        Song_list_info_adapter Song_list_info_adapter =new Song_list_info_adapter(this, Mydata.mylist);
+        listView.setAdapter(Song_list_info_adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

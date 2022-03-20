@@ -23,13 +23,13 @@
 
 
         <activity
-            android:name=".gedan3"
+            android:name=".Song_list_3"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".gadan2"
+            android:name=".Song_list_2"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".gedan"
+            android:name=".Song_list_1"
             android:screenOrientation="portrait" />
         <activity
             android:name=".play_activity"
@@ -43,7 +43,7 @@
             android:foregroundServiceType="mediaProjection" />
 
         <activity
-            android:name=".thirdactivity"
+            android:name=".Sleep_timing"
             android:screenOrientation="portrait" />
         <activity
             android:name=".MainActivity"
@@ -55,7 +55,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".secondactivity"
+            android:name=".File_import"
             android:screenOrientation="portrait" />
     </application>
 

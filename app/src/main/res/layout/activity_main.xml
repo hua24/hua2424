@@ -30,7 +30,7 @@
                 <ImageButton
                     android:id="@+id/main_side"
                     android:layout_alignParentStart="true"
-                    android:onClick="open"
+                    android:onClick="open_side"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="@drawable/yuanxing_beijing"
@@ -79,7 +79,7 @@
                     android:padding="5dp"
                     android:id="@+id/small_picture"
                     android:clickable="true"
-                    android:onClick="show"
+                    android:onClick="to_playing"
                     android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"
@@ -98,7 +98,7 @@
                         android:gravity="center_vertical"
                         android:textColor="@color/white"
                         android:clickable="true"
-                        android:onClick="show"
+                        android:onClick="to_playing"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"/>
@@ -238,7 +238,7 @@
                     android:gravity="center"
                     android:background="@drawable/juxing_beijing"
                     android:clickable="true"
-                    android:onClick="firsttosecond"
+                    android:onClick="to_file_import"
                     android:textSize="30sp"
                     android:text="导入文件" />
                 <TextView
@@ -250,14 +250,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@drawable/juxing_beijing"
-                    android:onClick="firsttothird" />
+                    android:onClick="to_sleep_timing" />
                 <TextView
                     style="@style/shadow"
                     android:textColor="@color/white"
                     android:text="歌单管理"
                     android:textSize="30sp"
                     android:gravity="center"
-                    android:onClick="gedan"
+                    android:onClick="songlist_manage"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:background="@drawable/juxing_beijing" />

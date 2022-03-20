@@ -112,7 +112,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:id="@+id/test"/>
+                    android:id="@+id/total_time"/>
             </LinearLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -137,7 +137,7 @@
                 <ImageButton
                     android:backgroundTintMode="src_in"
                     android:id="@+id/pause"
-                    android:onClick="pause"
+                    android:onClick="pause_or_play"
                     android:layout_width="wrap_content"
                     android:layout_centerInParent="true"
                     android:layout_height="wrap_content"

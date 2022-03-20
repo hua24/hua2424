@@ -28,16 +28,16 @@ public class net {
             inputStream=connection.getInputStream();
             inputStreamReader=new InputStreamReader(inputStream);
             bufferedReader=new BufferedReader(inputStreamReader);
-            stringBuilder=new StringBuilder();
+            stringBuilder=new StringBuilder();//准备连接字符串
             String line="";
             //逐行读数据
             while((line=bufferedReader.readLine())!=null){
-                stringBuilder.append(line);
+                stringBuilder.append(line);//字符串连接
             }
             result=stringBuilder.toString();
         } catch (Exception e) {
             e.printStackTrace();
-        }finally {
+        }finally {//关闭相关数据流
             if(connection!=null)
                 connection.disconnect();
             if(inputStreamReader!=null) {
@@ -55,8 +55,6 @@ public class net {
                 }
             }
         }
-
-
         return result;
     }
     public static String getweatherofcity(String city){
