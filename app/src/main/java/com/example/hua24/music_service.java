@@ -238,7 +238,7 @@ public class music_service extends Service {
     }
     public void check_picture(){
         //bitmap=null;
-        RemoteViews remoteViews=new RemoteViews("com.example.myapplication3",R.layout.notificaction);//绑定通知栏布局
+        RemoteViews remoteViews=new RemoteViews(getPackageName(),R.layout.notificaction);//绑定通知栏布局
         mBuilder.setContent(remoteViews);
         //remoteViews=new RemoteViews("com.example.myapplication3",R.layout.notificaction);//绑定通知栏布局
         MediaMetadataRetriever metadata=new MediaMetadataRetriever();
@@ -259,7 +259,7 @@ public class music_service extends Service {
         System.out.println("11111");
     }
     public void check(){
-        RemoteViews remoteViews=new RemoteViews("com.example.myapplication3",R.layout.notificaction);//绑定通知栏布局
+        RemoteViews remoteViews=new RemoteViews(getPackageName(),R.layout.notificaction);//绑定通知栏布局
         mBuilder.setContent(remoteViews);
         //remoteViews=new RemoteViews("com.example.myapplication3",R.layout.notificaction);//绑定通知栏布局
         if(Mydata.pause==1){//管理暂停按钮图片切换
