@@ -42,6 +42,7 @@ public class music_service extends Service {
         intentFilter.addAction("play_change");
         intentFilter.addAction("picture_change");
         intentFilter.addAction("progress_change_lyric");
+        intentFilter.addAction("android.intent.action.PHONE_STATE");
         registerReceiver(myreceiver,intentFilter);
 
         new Thread(){//开启新线程，不断向外发送广播
@@ -193,6 +194,13 @@ public class music_service extends Service {
                 case "picture_change":{
                     //System.out.println("1111111111111");
                     check_picture();
+                    break;
+                }
+                case "android.intent.action.PHONE_STATE":{
+                    if(Mydata.pause==1){
+                        pause();
+                    }
+                    System.out.println("phonecall");
                     break;
                 }
             }
