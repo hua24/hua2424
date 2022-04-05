@@ -48,7 +48,6 @@ public class Mydata{
     static String song_album; //专辑
     static long song_offset; //偏移量
     static List<String> name_fromdatabase=new ArrayList<>();//数据库中查询到的名字集合
-    static boolean setting_1=true;//返回键不退出应用
 
 
 
