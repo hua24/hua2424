@@ -56,7 +56,7 @@ public class Mydata{
         SharedPreferences sp =context.getSharedPreferences(name,MODE_PRIVATE);
         SharedPreferences.Editor ed=sp.edit();
         ed.putString(name,value);
-        ed.commit();
+        ed.apply();
     }
     public static String Load_info(Context context,String name,String defult){//调取配置信息
         SharedPreferences sp =context.getSharedPreferences(name,MODE_PRIVATE);
