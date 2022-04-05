@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -224,7 +225,16 @@ public class Mydata{
         }
         return 0;
     }
-
+    public static boolean is_exists(String path){
+        try{
+            File file=new File(path);
+            if(!file.exists())
+                return false;
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
     public static void background(Activity activity,ImageView imageView){
         if(activity.fileList().length>0){
             try {

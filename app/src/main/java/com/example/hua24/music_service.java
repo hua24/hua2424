@@ -250,7 +250,7 @@ public class music_service extends Service {
         mBuilder.setContent(remoteViews);
         //remoteViews=new RemoteViews("com.example.myapplication3",R.layout.notificaction);//绑定通知栏布局
         MediaMetadataRetriever metadata=new MediaMetadataRetriever();
-        if(Mydata.path_picture!=null) {
+        if(Mydata.path_picture!=null&&Mydata.is_exists(Mydata.path_picture)) {
             metadata.setDataSource(Mydata.path_picture);
             image=metadata.getEmbeddedPicture();
         }
@@ -282,7 +282,7 @@ public class music_service extends Service {
         System.out.println("22222");
     }
     public void play(int progress){//根据data里的路径播放音乐（procress指定位置播放，默认0）
-        if(Mydata.path!=null)
+        if(Mydata.path!=null&&Mydata.is_exists(Mydata.path))
         try {
             mediaPlayer.setDataSource(Mydata.path);
             mediaPlayer.prepare();

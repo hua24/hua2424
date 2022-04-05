@@ -453,7 +453,7 @@ public class play_activity extends AppCompatActivity {
     @SuppressLint("CheckResult")
     public void update_picture() {//图片检查
         bitmap=null;
-        if (Mydata.path_picture != null) {
+        if (Mydata.path_picture != null&&Mydata.is_exists(Mydata.path_picture)) {
             MediaMetadataRetriever metadata = new MediaMetadataRetriever();
             metadata.setDataSource(Mydata.path_picture);
             image = metadata.getEmbeddedPicture();

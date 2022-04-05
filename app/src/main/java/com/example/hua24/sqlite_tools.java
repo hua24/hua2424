@@ -37,6 +37,8 @@ public class sqlite_tools {
         sqLiteDatabase.delete("name_list","name=?",new String[]{tablename});
     }
     public static void rename_table(String tablename,String newname,SQLiteDatabase sqLiteDatabase){//重命名表
+        if(newname.length()<1)
+            return;
         String sql="alter table " + tablename + " rename to "+newname;
         //String sql2="update name_list "+"set name= "+newname+" where name= "+tablename;
         sqLiteDatabase.execSQL(sql);

@@ -331,10 +331,10 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(0,android.R.anim.slide_out_right);//界面过渡效果
     }
     public void update_picture() {//图片检查
-        if (Mydata.path_picture != null) {
-            MediaMetadataRetriever metadata = new MediaMetadataRetriever();
-            metadata.setDataSource(Mydata.path_picture);
-            image = metadata.getEmbeddedPicture();
+        if (Mydata.path_picture != null&&Mydata.is_exists(Mydata.path_picture)) {
+                MediaMetadataRetriever metadata = new MediaMetadataRetriever();
+                metadata.setDataSource(Mydata.path_picture);
+                image = metadata.getEmbeddedPicture();
         }
         imageView = (ImageView) findViewById(R.id.small_picture);
         if (image == null) {//使用默认图片
