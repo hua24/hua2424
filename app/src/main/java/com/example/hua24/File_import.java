@@ -5,8 +5,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -15,7 +21,11 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.hua24.bean.weatherbean;
+import com.google.gson.Gson;
 import com.zlylib.fileselectorlib.FileSelector;
 import com.zlylib.fileselectorlib.utils.Const;
 
@@ -26,6 +36,30 @@ public class File_import extends AppCompatActivity {
     ImageView imageView;
     EditText editText;
     ListView listView;
+    Handler handler = new Handler(Looper.myLooper()) {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 111) {
+                Mydata.daoru(activity,null);
+                mysqlite mysqlite=new mysqlite(activity,"hua2424");
+                SQLiteDatabase sqLiteDatabase=mysqlite.getWritableDatabase();
+                sqlite_tools.create_table_mylist("mylist",sqLiteDatabase);
+                Song_list_info_adapter Song_list_info_adapter =new Song_list_info_adapter(activity, Mydata.mylist);
+                listView.setAdapter(Song_list_info_adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        String s=Mydata.mylist.get(position).get("path").toString();
+                        System.out.println(s);
+                    }
+                });
+                Mydata.Save_info(activity,"path",editText.getText().toString());//保存为默认路径
+                sqLiteDatabase.close();
+
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         activity=this;
@@ -40,7 +74,6 @@ public class File_import extends AppCompatActivity {
         editText=(EditText)findViewById(R.id.edittext);
         imageView=(ImageView)findViewById(R.id.second_bg);
         listView=(ListView)findViewById(R.id.music_list);
-
         Mydata.background(activity,imageView);
         editText.setText(Mydata.Load_info(activity,"path",null));
     }
@@ -65,20 +98,20 @@ public class File_import extends AppCompatActivity {
             }
     }
     public void daoru(View v){//获取界面上的path，给list赋值
-        Mydata.daoru(this,null);
-        mysqlite mysqlite=new mysqlite(activity,"hua2424");
-        SQLiteDatabase sqLiteDatabase=mysqlite.getWritableDatabase();
-        sqlite_tools.create_table_mylist("mylist",sqLiteDatabase);
-        Song_list_info_adapter Song_list_info_adapter =new Song_list_info_adapter(this, Mydata.mylist);
-        listView.setAdapter(Song_list_info_adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String s=Mydata.mylist.get(position).get("path").toString();
-                System.out.println(s);
+
+        new Thread(){
+            public void run(){
+                super.run();
+                Looper.prepare();
+                Toast.makeText(activity,"导入中",Toast.LENGTH_LONG).show();
+                Message message=Message.obtain();
+                message.what=111;
+                handler.sendMessage(message);
+                Looper.loop();
             }
-        });
-        Mydata.Save_info(this,"path",editText.getText().toString());//保存为默认路径
+        }.start();
+
+
     }
     public boolean onKeyDown(int keyCode, KeyEvent event) {//系统返回按钮
         if (keyCode == KeyEvent.KEYCODE_BACK) {

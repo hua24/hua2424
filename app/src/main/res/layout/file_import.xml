@@ -33,28 +33,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="5" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal">
+            <TextView
+                style="@style/shadow"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:onClick="open_file"
+                android:layout_width="wrap_content"
+                android:layout_height="50sp"
+                android:background="@drawable/juxing_beijing"
+                android:clickable="true"
+                android:text="选择文件夹"
+                android:textSize="30sp" />
 
-        <TextView
-            style="@style/shadow"
-            android:textColor="@color/white"
-            android:onClick="open_file"
-            android:layout_width="wrap_content"
-            android:layout_height="50sp"
-            android:background="@drawable/juxing_beijing"
-            android:clickable="true"
-            android:text="选择文件夹"
-            android:textSize="30sp" />
+            <TextView
+                android:layout_weight="1"
+                android:gravity="center"
+                style="@style/shadow"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="50sp"
+                android:background="@drawable/juxing_beijing"
+                android:clickable="true"
+                android:onClick="daoru"
+                android:text="导入文件夹"
+                android:textSize="30sp" />
+        </LinearLayout>
 
-        <TextView
-            style="@style/shadow"
-            android:textColor="@color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="50sp"
-            android:background="@drawable/juxing_beijing"
-            android:clickable="true"
-            android:onClick="daoru"
-            android:text="导入文件夹"
-            android:textSize="30sp" />
 
         <ListView
             android:id="@+id/music_list"

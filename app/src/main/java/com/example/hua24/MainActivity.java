@@ -298,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
         Intent intent=new Intent(activity,music_service.class);
         stopService(intent);//解除服务绑定
         Mydata.recycle_bitmap();
+        sqLiteDatabase.close();
         super.onDestroy();
     }
     public void search(View v){
