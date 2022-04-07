@@ -42,6 +42,8 @@ public class sqlite_tools {
         if(is_table_exist("mylist",sqLiteDatabase)){
             if(Mydata.mylist!=null)
                 Mydata.mylist.clear();
+            if(Mydata.play_list1!=null)
+                Mydata.play_list1.clear();
             Cursor cursor=sqLiteDatabase.query("mylist",null,null,null,null,null,null);
             Map<String,Object> map;
             try{
@@ -51,6 +53,7 @@ public class sqlite_tools {
                     map.put("size",cursor.getString(cursor.getColumnIndex("size")));
                     map.put("time",cursor.getString(cursor.getColumnIndex("time")));
                     map.put("path",cursor.getString(cursor.getColumnIndex("path")));
+                    Mydata.play_list1.add(cursor.getString(cursor.getColumnIndex("path")));
                     Mydata.mylist.add(map);
                 }
                 cursor.close();
