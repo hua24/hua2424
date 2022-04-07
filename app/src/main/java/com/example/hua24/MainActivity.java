@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -69,7 +70,10 @@ public class MainActivity extends AppCompatActivity {
     String progress;
     EditText editText_search;
     ImageView imageView;
+    ImageView imageView2;
     Song_list_info_adapter Song_list_info_adapter;
+    mysqlite mysqlite;
+    SQLiteDatabase sqLiteDatabase;
     boolean activity_running;
     Handler handler = new Handler(Looper.myLooper()) {
         @Override
@@ -112,10 +116,17 @@ public class MainActivity extends AppCompatActivity {
             window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             window.setStatusBarColor(Color.argb(25, 00, 00, 00));
         }
+        mysqlite=new mysqlite(activity,"hua2424");
+        sqLiteDatabase=mysqlite.getWritableDatabase();
+        listView = (ListView) findViewById(R.id.music_list2);
         imageView = (ImageView) findViewById(R.id.small_picture);
+        imageView2 = (ImageView) findViewById(R.id.main_bg);
         editText_search = (EditText) findViewById(R.id.search_song);
         progressBar = (ProgressBar) findViewById(R.id.small_progressbar);
         requestPermissions();
+        /*if (Mydata.Load_info(activity, "path", null) != null)//默认文件位置
+            Mydata.daoru(activity, Mydata.Load_info(activity, "path", null));*/
+        sqlite_tools.get_mylist_from_database(sqLiteDatabase);//从数据库中获取之前扫描到的列表
         if (Mydata.Load_info(activity, "weathershow", "no").equals("yes"))
             getweather(Mydata.Load_info(activity, "city", "婺源"));
         intentFilter.addAction("time_change");
@@ -126,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
         update_pause_and_play();
         update_progressbar();
         update_progress();
-        listView = (ListView) findViewById(R.id.music_list2);
         Song_list_info_adapter = new Song_list_info_adapter(activity, Mydata.mylist);
         listView.setAdapter(Song_list_info_adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -145,12 +155,10 @@ public class MainActivity extends AppCompatActivity {
         });
         Intent intent = new Intent(activity, music_service.class);
         startService(intent);
-        if (Mydata.Load_info(activity, "path", null) != null)//默认文件位置
-            Mydata.daoru(activity, Mydata.Load_info(activity, "path", null));
+
         Mydata.mode = Mydata.Load_info(activity, "mode", "order");//默认播放模式
         Activity_manager.addActivity(activity);
-        ImageView imageView = (ImageView) findViewById(R.id.main_bg);
-        Mydata.background(activity, imageView);
+        Mydata.background(activity, imageView2);
         mSwitch = (SwitchCompat) findViewById(R.id.setting_back);
         mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

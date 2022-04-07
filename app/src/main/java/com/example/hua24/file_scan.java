@@ -9,7 +9,7 @@ import java.util.Map;
 public class file_scan {
 
 
-    public static void fileScan(String path){//扫面文件夹，将信息放在list里
+    public static void fileScan(String path){//扫描文件夹，将信息放在list里
         File file =new File(path);
         File[] files = file.listFiles();
         MediaMetadataRetriever mediaMetadataRetriever=new MediaMetadataRetriever();
@@ -38,6 +38,7 @@ public class file_scan {
                     Mydata.play_list1.add(item.getAbsolutePath());//播放列表，里面只有播放路径
                 }
             }
+
 
         }
     }

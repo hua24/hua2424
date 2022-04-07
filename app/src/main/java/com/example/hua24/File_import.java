@@ -1,6 +1,7 @@
 package com.example.hua24;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -65,6 +66,9 @@ public class File_import extends AppCompatActivity {
     }
     public void daoru(View v){//获取界面上的path，给list赋值
         Mydata.daoru(this,null);
+        mysqlite mysqlite=new mysqlite(activity,"hua2424");
+        SQLiteDatabase sqLiteDatabase=mysqlite.getWritableDatabase();
+        sqlite_tools.create_table_mylist("mylist",sqLiteDatabase);
         Song_list_info_adapter Song_list_info_adapter =new Song_list_info_adapter(this, Mydata.mylist);
         listView.setAdapter(Song_list_info_adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
