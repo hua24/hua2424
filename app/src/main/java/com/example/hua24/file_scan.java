@@ -12,6 +12,7 @@ public class file_scan {
     public static void fileScan(String path){//扫描文件夹，将信息放在list里
         File file =new File(path);
         File[] files = file.listFiles();
+        Map<String,Object> map;
         MediaMetadataRetriever mediaMetadataRetriever=new MediaMetadataRetriever();
         if(files!=null){
             for(File item : files){
@@ -26,7 +27,7 @@ public class file_scan {
                     //System.out.println(item.length());
                     String s1 = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
                     //System.out.println(s1);
-                    Map<String,Object> map=new HashMap<String, Object>();
+                    map=new HashMap<String, Object>();
                     if(item.getName().indexOf("-")!=-1)
                         map.put("name",item.getName().substring(0,item.getName().lastIndexOf("-")));
                     else
