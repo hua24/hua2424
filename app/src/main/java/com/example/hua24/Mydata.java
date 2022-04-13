@@ -152,14 +152,18 @@ public class Mydata{
         if(Mydata.path!=null) {
             if (Mydata.path.contains(".flac")) {
                 file = new File(Mydata.path.replace(".flac", ".lrc"));
-            } else {
+            } else if(Mydata.path.contains(".mp3")){
                 file = new File(Mydata.path.replace(".mp3", ".lrc"));
+            } else if(Mydata.path.contains(".m4a")){
+                file = new File(Mydata.path.replace(".m4a", ".lrc"));
+            } else if(Mydata.path.contains(".wav")){
+                file = new File(Mydata.path.replace(".wav", ".lrc"));
             }
         }
         if (file != null && file.exists()) {
             try {
                 setupLyricResource(new FileInputStream(file),"UTF-8");
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

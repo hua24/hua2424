@@ -21,7 +21,7 @@ public class file_scan {
                     //如果是文件夹进行再次扫描
                     fileScan(String.valueOf(item));
                 }
-                else if(item.getName().endsWith(".mp3")||item.getName().endsWith(".flac")) {
+                else if(item.getName().endsWith(".mp3")||item.getName().endsWith(".flac")||item.getName().endsWith(".m4a")||item.getName().endsWith(".wav")) {
                     //System.out.println(item.getName());
                     mediaMetadataRetriever.setDataSource(item.getAbsolutePath());
                     //System.out.println(item.length());
