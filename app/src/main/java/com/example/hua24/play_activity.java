@@ -54,6 +54,8 @@ import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.text.NumberFormat;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class play_activity extends AppCompatActivity {
     public Activity activity;
@@ -75,6 +77,7 @@ public class play_activity extends AppCompatActivity {
     ImageButton imageButton;
     Animation rotateAnimation;
     HorizontalScrollView horizontalScrollView;
+    Timer timer;
     int x1=0,x2=0,y1=0,y2=0;//监听滑动获取到的坐标
 
     Handler handler=new Handler(Looper.myLooper()){
@@ -114,6 +117,7 @@ public class play_activity extends AppCompatActivity {
         rotateAnimation.setInterpolator(lin);//匀速
 
         numberFormat.setMaximumFractionDigits(0);//取消小数部分
+        timer=new Timer();
 
         show_time = (TextView) findViewById(R.id.show_time);
         play_name = (TextView) findViewById(R.id.name_song);
@@ -153,7 +157,7 @@ public class play_activity extends AppCompatActivity {
             update_play_name_and_total_time();//刷新当前播放的音乐名字
         }
         update_play_mode();//播放模式刷新
-        total_time.setText(tools.change_time(Mydata.time_onesong));//显示当前播放的单首歌曲的总时间
+        total_time.setText(tools.change_time2(Mydata.time_onesong));//显示当前播放的单首歌曲的总时间
         horizontalScrollView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -200,7 +204,16 @@ public class play_activity extends AppCompatActivity {
 
             @Override//松开触发
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Mydata.seekbar_stop = false;//进度条继续刷新
+                new Thread(){
+                    public void run(){
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Mydata.seekbar_stop = false;//进度条继续刷新
+                    }
+                }.start();
                 Intent intent = new Intent("progress_change");
                 sendBroadcast(intent);//发送跳转播放信号
             }
@@ -225,7 +238,17 @@ public class play_activity extends AppCompatActivity {
                     System.out.println("down");
                 }
                 if(event.getAction()==MotionEvent.ACTION_UP){
-                    Mydata.lyric_stop=false;
+                    timer.cancel();
+                    timer.purge();
+                    timer=new Timer();
+                    timer.schedule(new TimerTask(){
+
+                        @Override
+                        public void run() {
+                            Mydata.lyric_stop=false;
+                        }
+                    },3000);
+
                     x2=(int)event.getX();
                     y2=(int)event.getY();
                     System.out.println(x1+","+y1);
@@ -270,13 +293,12 @@ public class play_activity extends AppCompatActivity {
     }
 
     public void update_progressbar_and_show_time() {//进度条与实时时间刷新
-        show_time.setText(tools.change_time(Mydata.time));
+        show_time.setText(tools.change_time2(Mydata.time));
         try{
-            progress=numberFormat.format((float)Integer.parseInt(Mydata.time)/(float)Integer.parseInt(Mydata.time_onesong)*100);
+            progress=numberFormat.format((float)Mydata.time /(float)Mydata.time_onesong *100);
         }catch (Exception e){
             progress="0";
         }
-        //progress = numberFormat.format((float) Integer.parseInt(Mydata.time) / (float) Integer.parseInt(Mydata.time_onesong) * 100);
         seekBar.setProgress(Integer.parseInt(progress));
     }
 
@@ -302,14 +324,13 @@ public class play_activity extends AppCompatActivity {
     }
 
     public void update_play_name_and_total_time() {//刷新当前播放的音乐名字与时间
-        if(Mydata.path!=null){
-            if(play_name.getText().toString()!=Mydata.getname_from_path())
-                play_name.setText(Mydata.getname_from_path());
-
-            if(total_time.getText().toString()!=Mydata.time_onesong)
-                total_time.setText(tools.change_time(Mydata.time_onesong));//刷新当前播放的音乐时间
-        }
-
+        try{
+            if(Mydata.path!=null){
+                if(play_name.getText().toString()!=Mydata.getname_from_path())
+                    play_name.setText(Mydata.getname_from_path());
+                total_time.setText(tools.change_time2(Mydata.time_onesong));//刷新当前播放的音乐时间
+            }
+        }catch (Exception e) { }
     }
 
     public void update_play_mode() {//播放模式刷新

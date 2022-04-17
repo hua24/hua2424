@@ -9,9 +9,22 @@ public class tools {//将时间格式化
         int s=(x%60000)/1000;
         String Time;
         if(s<10)
-            Time=String.valueOf(m)+":0"+String.valueOf(s);
+            Time=m+":0"+s;
         else
-            Time=String.valueOf(m)+":"+String.valueOf(s);
+            Time=m+":"+s;
+        return Time;
+    }
+    public static String change_time2(int time){
+        if(time==0)
+            return "0";
+        int x=time;
+        int m=x/60000;
+        int s=(x%60000)/1000;
+        String Time;
+        if(s<10)
+            Time=m+":0"+s;
+        else
+            Time=m+":"+s;
         return Time;
     }
     public static String change_size(long size){//将文件大小格式化

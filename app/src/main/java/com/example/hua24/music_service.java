@@ -56,8 +56,8 @@ public class music_service extends Service {
                                 Mydata.pause = 1;//刷新播放状态
                                 sendBroadcast(intent3);//发送状态改变信号
                             }
-                            Mydata.time=null;
-                            Mydata.time=String.valueOf(mediaPlayer.getCurrentPosition());//得到播放时的位置
+                            Mydata.time =0;
+                            Mydata.time =mediaPlayer.getCurrentPosition();//得到播放时的位置
                         }
                         else{
                             if(Mydata.pause!=-1) {
@@ -126,7 +126,7 @@ public class music_service extends Service {
                     if (mediaPlayer.isPlaying()) {
                         mediaPlayer.stop();
                         mediaPlayer.reset();
-                        float play_progress = (float) Mydata.playing_progress / 100 * Integer.parseInt(Mydata.time_onesong);//根据进度条位置得到歌曲应跳转的位置
+                        float play_progress = (float) Mydata.playing_progress / 100 * Mydata.time_onesong;//根据进度条位置得到歌曲应跳转的位置
                         play((int) play_progress);//寻找指定位置播放
                     }
                     break;
@@ -290,7 +290,7 @@ public class music_service extends Service {
             mediaPlayer.start();
             Mydata.lyric_scan();
             ready=true;//表示mediaplayer初始化完毕
-            Mydata.time_onesong= String.valueOf(mediaPlayer.getDuration());//得到当前播放的音乐的时间长度
+            Mydata.time_onesong = mediaPlayer.getDuration();//得到当前播放的音乐的时间长度
         } catch (IOException e) {
             e.printStackTrace();
         }

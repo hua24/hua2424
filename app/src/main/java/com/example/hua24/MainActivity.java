@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                 String s = Mydata.mylist.get(position).get("path").toString();
                 String s1 = Mydata.mylist.get(position).get("time").toString();
                 Mydata.path = s;
-                Mydata.time_onesong = s1;
+                Mydata.time_onesong = Integer.parseInt(s1);
                 Intent intent = new Intent("play");
                 sendBroadcast(intent);
                 update_playing_name();
@@ -275,7 +275,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void update_progressbar(){//进度条刷新
             try{
-                progress=numberFormat.format((float)Integer.parseInt(Mydata.time)/(float)Integer.parseInt(Mydata.time_onesong)*100);
+                progress=numberFormat.format((float)Mydata.time /(float)Mydata.time_onesong *100);
             }catch (Exception e){
                 progress="0";
             }

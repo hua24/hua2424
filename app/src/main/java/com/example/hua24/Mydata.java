@@ -7,12 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -34,8 +32,8 @@ public class Mydata{
     static String name_song;//正在播放的音乐名字
     static String path;//正在播放的歌曲路径
     static String path_picture; //正在播放的音乐的图片
-    static String time="0";//正在播放的时间（1s更新一次）
-    static String time_onesong="1"; //正在播放的歌曲单首的时间
+    static int time =0;//正在播放的时间（1s更新一次）
+    static int time_onesong =1;//正在播放的歌曲单首的时间
     static boolean seekbar_stop=false; //标记进度条按下的状态，防止拖动时更新进度条
     static boolean lyric_stop=false; //标记歌词按下的状态，防止拖动时更新歌词
     static int playing_progress=0;//记录进度条当前位置（拖动时不断改变）
@@ -126,13 +124,13 @@ public class Mydata{
     }
     public static int get_lyrics_position(){//返回当前播放的歌词的位置
         int times=0;
-        if(Mydata.time!=null)
+        /*if(Mydata.time!=null)
             try{
                 times=Integer.parseInt(Mydata.time);
             }catch(Exception e){
                 return 0;
-            }
-
+            }*/
+        times=Mydata.time;
         int position=0;
         if(Mydata.song_lines!=null)
         for(int i=0;i<Mydata.song_lines.size()-1;i++){
