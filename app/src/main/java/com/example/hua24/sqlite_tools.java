@@ -61,7 +61,6 @@ public class sqlite_tools {
 
             }
         }
-        System.out.println(Mydata.mylist);
     }
     public static boolean is_table_exist(String tablename,SQLiteDatabase sqLiteDatabase){//判断表是否存在
         try{
