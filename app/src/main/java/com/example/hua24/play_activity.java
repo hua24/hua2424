@@ -224,7 +224,16 @@ public class play_activity extends AppCompatActivity {
                 Mydata.playing_progress_lyric=Integer.parseInt(Mydata.song_lines.get(position).get("start_time").toString());//跳转播放时间
                 Intent intent = new Intent("progress_change_lyric");//歌词控制播放进度
                 sendBroadcast(intent);
-                Mydata.lyric_stop=false;
+                new Thread(){
+                    public void run(){
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Mydata.lyric_stop = false;//进度条继续刷新
+                    }
+                }.start();
 
 
             }
