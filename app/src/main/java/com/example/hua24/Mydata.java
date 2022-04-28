@@ -116,11 +116,15 @@ public class Mydata{
             name_song=Mydata.path.substring(Mydata.path.lastIndexOf("/")+1,Mydata.path.lastIndexOf("."));
         return name_song;
     }
-    public static String timefromstring(String str) {//从歌词中读取每一句的开始时间
-        int minute = Integer.parseInt(str.substring(1, 3));
-        int second = Integer.parseInt(str.substring(4,6));
-        int millisecond = Integer.parseInt(str.substring(7,9));
-        return String.valueOf(millisecond + second * 1000 + minute * 60 * 1000);
+    public static int timefromstring(String str) {//从歌词中读取每一句的开始时间
+        try{
+            int minute = Integer.parseInt(str.substring(1, 3));
+            int second = Integer.parseInt(str.substring(4,6));
+            int millisecond = Integer.parseInt(str.substring(7,9));
+            return millisecond + second * 1000 + minute * 60 * 1000;
+        }catch(Exception e){
+            return 0;
+        }
     }
     public static int get_lyrics_position(){//返回当前播放的歌词的位置
         int times=0;
@@ -215,17 +219,21 @@ public class Mydata{
         if(line != null && index == 9 && line.trim().length() > 10) {//trim去除前后空格与特殊字符
             // 歌词内容
             Map<String,Object> map=new HashMap<String, Object>();
-            map.put("content",line.substring(10, line.length()));//歌词内容
+            map.put("content",line.substring(10));//歌词内容
             map.put("start_time",Mydata.timefromstring(line.substring(0, 10)));//歌词开始时间
             Mydata.song_lines.add(map);//添加进列表
         }
     }
     public static int get_song_position(String s){
-        for(int i=0;i<Mydata.mylist.size();i++){
-            if(Mydata.mylist.get(i).get("path").toString().contains(s))
-                return i;
+        try{
+            for(int i=0;i<Mydata.mylist.size();i++){
+                if(Mydata.mylist.get(i).get("path").toString().contains(s))
+                    return i;
+            }
+            return 0;
+        }catch(Exception e){
+            return 0;
         }
-        return 0;
     }
     public static boolean is_exists(String path){
         try{
