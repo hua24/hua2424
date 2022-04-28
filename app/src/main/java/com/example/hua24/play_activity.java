@@ -231,7 +231,7 @@ public class play_activity extends AppCompatActivity {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Mydata.lyric_stop = false;//进度条继续刷新
+                        Mydata.lyric_stop = false;
                     }
                 }.start();
 
