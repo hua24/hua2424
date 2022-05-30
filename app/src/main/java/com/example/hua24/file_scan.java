@@ -28,9 +28,9 @@ public class file_scan {
                     String s1 = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
                     //System.out.println(s1);
                     map=new HashMap<String, Object>();
-                    if(item.getName().indexOf("-")!=-1)
+                    /*if(item.getName().indexOf("-")!=-1)
                         map.put("name",item.getName().substring(0,item.getName().lastIndexOf("-")));
-                    else
+                    else*/
                         map.put("name",item.getName().substring(0,item.getName().lastIndexOf(".")));
                     map.put("size",tools.change_size(item.length()));
                     map.put("time",s1);

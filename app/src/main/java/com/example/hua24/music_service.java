@@ -209,13 +209,13 @@ public class music_service extends Service {
     }
     public void create_notification(){
         RemoteViews remoteViews=new RemoteViews(getPackageName(),R.layout.notificaction);//绑定通知栏布局
-        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mBuilder=new Notification.Builder(this)
+        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);//获取NotificationManager对象
+        mBuilder=new Notification.Builder(this)//设置相关属性
                 .setContentTitle("a")
                 .setContentText("b")
                 .setSmallIcon(R.mipmap.pause);
-        notification = mBuilder.build();
-        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+        notification = mBuilder.build();//通知创建完成
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){//高版本需增加推送步骤
             NotificationChannel nc=new NotificationChannel("1","mytongzhi",NotificationManager.IMPORTANCE_LOW);
             nm.createNotificationChannel(nc);
             mBuilder.setChannelId("1");
@@ -239,10 +239,10 @@ public class music_service extends Service {
         remoteViews.setOnClickPendingIntent(R.id.tongzhi_previous,pendingIntent_tongzhi_previous);
         remoteViews.setOnClickPendingIntent(R.id.tongzhi_shutdown,pendingIntent_tongzhi_shutdown);
         remoteViews.setOnClickPendingIntent(R.id.tongzhi_picture,pendingIntent_tongzhi_picture);
-        mBuilder.setContent(remoteViews);
-        mBuilder.setOngoing(true);
-        nm.notify(1,notification);
-        startForeground(1,notification);//前台服务，防止系统将其自动关闭
+        mBuilder.setContent(remoteViews);//绑定布局
+        mBuilder.setOngoing(true);//常驻通知，不被取消
+        nm.notify(1,notification);//推送通知
+        startForeground(1,notification);//前台服务，防止系统将服务自动关闭
     }
     public void check_picture(){
         //bitmap=null;
@@ -264,7 +264,7 @@ public class music_service extends Service {
         if(Mydata.path!=null)//刷新播放的音乐名字
             remoteViews.setTextViewText(R.id.tongzhi_name,Mydata.getname_from_path());
         nm.notify(1,notification);
-        System.out.println("11111");
+        //System.out.println("11111");
     }
     public void check(){
         RemoteViews remoteViews=new RemoteViews(getPackageName(),R.layout.notificaction);//绑定通知栏布局
@@ -279,7 +279,7 @@ public class music_service extends Service {
             remoteViews.setImageViewResource(R.id.tongzhi_pause_or_play,R.mipmap.pause_dark);
         }
         nm.notify(1,notification);
-        System.out.println("22222");
+        //System.out.println("22222");
     }
     public void play(int progress){//根据data里的路径播放音乐（procress指定位置播放，默认0）
         if(Mydata.path!=null&&Mydata.is_exists(Mydata.path))

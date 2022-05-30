@@ -498,11 +498,11 @@ public class play_activity extends AppCompatActivity {
             Glide.with(activity)//设置图片
                     .load(R.mipmap.gif1)
                     .apply(RequestOptions.bitmapTransform(new CircleCrop()))
-                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.DATA))
-                    .transition(DrawableTransitionOptions.with(drawableCrossFadeFactory))
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.DATA))//在解码之前，将检索到的数据直接写入磁盘缓存
+                    .transition(DrawableTransitionOptions.with(drawableCrossFadeFactory))//切换时的渐变效果
                     .into(new SimpleTarget<Drawable>() {
                               @Override
-                              public void onResourceReady(Drawable drawable, Transition<? super Drawable> transition) {
+                              public void onResourceReady(Drawable drawable, Transition<? super Drawable> transition) {//设置循环次数
                                   if (drawable instanceof GifDrawable) {
                                       GifDrawable gifDrawable = (GifDrawable) drawable;
                                       gifDrawable.setLoopCount(1);

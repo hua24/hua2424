@@ -73,10 +73,10 @@ public class Song_list_3_adapter extends BaseAdapter {
             checkBox.setChecked(false);
         }
         String s;//对路径进行裁剪，只显示名称
-        if(mylist.get(position).substring(mylist.get(position).lastIndexOf("/")).contains("-")) {
+        /*if(mylist.get(position).substring(mylist.get(position).lastIndexOf("/")).contains("-")) {
             s=mylist.get(position).substring(mylist.get(position).lastIndexOf("/") + 1, mylist.get(position).lastIndexOf("-"));
         }
-        else
+        else*/
             s=mylist.get(position).substring(mylist.get(position).lastIndexOf("/")+1,mylist.get(position).lastIndexOf("."));
         textView_name.setText(s);
         return view;
