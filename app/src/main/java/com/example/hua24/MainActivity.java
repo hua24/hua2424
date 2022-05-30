@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1) {
-                String weather = (String) msg.obj;
+                String weather = (String) msg.obj;//包含所有天气信息
                 Gson gson = new Gson();
                 weatherbean weatherbean = gson.fromJson(weather, com.example.hua24.bean.weatherbean.class);
                 if (weatherbean == null)
@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
             mSwitch2.setChecked(true);
         } else
             mSwitch2.setChecked(false);
-        editText_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        editText_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {//监控键盘回车
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -415,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
         // and then we can return your byte array.
         return byteBuffer.toByteArray();
     }
-    private void bytesToImageFile(byte[] bytes) {
+    private void bytesToImageFile(byte[] bytes) {//路径:/data/data/com.example.hua24/files/bkground.jpg
         try {
             FileOutputStream fos = openFileOutput("bkground.jpg",MODE_PRIVATE);
             fos.write(bytes, 0, bytes.length);
