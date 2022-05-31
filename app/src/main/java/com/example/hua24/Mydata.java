@@ -224,7 +224,7 @@ public class Mydata{
             Mydata.song_lines.add(map);//添加进列表
         }
     }
-    public static int get_song_position(String s){
+    public static int get_song_position(String s){//歌曲搜索功能
         try{
             for(int i=0;i<Mydata.mylist.size();i++){
                 if(Mydata.mylist.get(i).get("path").toString().contains(s))
